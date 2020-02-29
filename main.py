@@ -11,7 +11,7 @@ client = discord.Client()
 
 @client.event
 async def on_ready():
-    print('bot is ready')
+    print('Bot is ready.')
 
 @client.event
 async def on_message(message):
