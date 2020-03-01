@@ -10,10 +10,12 @@ with open('config.json') as config_file:
 #creates client object
 client = discord.Client()
 
+#on ready
 @client.event
 async def on_ready():
     print('Bot is ready.')
 
+#whenever a user sends a message
 @client.event
 async def on_message(message):
     if message.content.startswith('hajime'):
