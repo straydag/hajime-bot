@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import json
 import discord
 from discord.ext import commands
