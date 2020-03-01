@@ -7,7 +7,7 @@ from discord.ext import commands
 with open('config.json') as config_file:
     token = json.load(config_file)["token"]
 
-
+#creates client object
 client = discord.Client()
 
 @client.event
