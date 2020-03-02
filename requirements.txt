@@ -1,2 +1,4 @@
 discord.py
 py-trello
+requests_oauthlib
+

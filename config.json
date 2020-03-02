@@ -1,5 +1,6 @@
 {
 	"discord_token": "",
-	"trello_token": ""
+	"trello_token": "",
+	"trello_secret": ""
 }
 
