@@ -1,4 +1,6 @@
 discord.py
 py-trello
 requests_oauthlib
-
+requests
+aiohttp
+asyncio
