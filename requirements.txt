@@ -4,3 +4,5 @@ requests_oauthlib
 requests
 aiohttp
 asyncio
+aiosqlite
+

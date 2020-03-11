@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 import json
 import asyncio
+import sqlite3
 import discord
 import requests
 import aiohttp
+import aiosqlite
+import os.path
 from requests_oauthlib import OAuth1Session
 from discord.ext import commands
-
 
 #grabs tokens from config file
 with open('config.json') as config_file:
     data = json.load(config_file)
     discord_token = data["discord_token"]
     trello_token = data["trello_token"] 
+    path_to_db = data["path_to_db"]
 
 #creates client object
 client = discord.Client()
@@ -62,6 +65,16 @@ async def on_message(message):
                    
                     #if response valid, extracts user's name from response json data and sends welcome message with name, else sends user failure message
                     if response != 'invalid token':
+                        
+                        #adds the user's discord username to the database along with their trello id
+                        conn = await aiosqlite.connect(path_to_db)                                                     
+                        curs = await conn.cursor()
+                        await curs.execute("CREATE TABLE IF NOT EXISTS users (discord_id TEXT, trello_id TEXT, is_logged_in INTEGER)")
+                        await curs.execute("INSERT INTO users VALUES (?, ?, ?)", (message.author.id, reply.content, 1))
+                        await conn.commit() 
+                        await conn.close()
+                        
+                        #puts the json response into a response variable and send a message to the user welcoming them
                         response = json.loads(response)
                         await message.author.send('welcome ' + response.get("fullName"))  
 
