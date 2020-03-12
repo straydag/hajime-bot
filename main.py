@@ -85,6 +85,16 @@ async def on_message(message):
                 await message.author.send('timed out')
 
 
+'''
+Help
+'''
+@client.command()  # TODO: UpdATE
+async def help(ctx):
+    embed = discord.Embed(color=discord.Color.green())
+    embed.set_author(name="Help!")
+    # embed.add_field(name='+ping, +latency', value="Returns Bot's Ping", inline=False) <-- example
+    await ctx.send(embed=embed)
+
 client.run(discord_token)
 
 
