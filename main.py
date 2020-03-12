@@ -28,7 +28,7 @@ client = discord.Client()
 #on ready
 @client.event
 async def on_ready():
-    print('Bot is ready.')
+    print('Bot is ready')
 
 #whenever a user sends a message
 @client.event
@@ -84,10 +84,10 @@ async def on_message(message):
                         await message.author.send('welcome ' + response.get("fullName"))  
 
                     else:
-                        await message.author.send('error logging in')
+                        await message.author.send('error logging in, :/')
 
             except asyncio.TimeoutError:
-                await message.author.send('timed out')
+                await message.author.send('timed out, please try again')
 
 client.run(discord_token)
 
