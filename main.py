@@ -84,7 +84,7 @@ async def on_message(message):
                         await message.author.send('welcome ' + response.get("fullName"))  
 
                     else:
-                        await message.author.send('error logging in, :/')
+                        await message.author.send('error logging in')
 
             except asyncio.TimeoutError:
                 await message.author.send('timed out, please try again')
