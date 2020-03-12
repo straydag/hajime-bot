@@ -1,3 +1,10 @@
+'''
+NOTE: Before commit: change version number and date. Add new commands to the help section @ bottom
+
+Date: 12/3/20
+Version: 0.0.1
+
+'''
 #!/usr/bin/env python3
 import json
 import asyncio
