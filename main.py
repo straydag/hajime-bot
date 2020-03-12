@@ -89,4 +89,5 @@ async def on_message(message):
             except asyncio.TimeoutError:
                 await message.author.send('timed out')
 
+client.run(discord_token)
 
