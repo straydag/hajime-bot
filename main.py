@@ -1,6 +1,6 @@
 '''
 NOTE: Before commit: change version number.
-Version: 0.0.1
+Version: 0.0.2
 
 '''
 #!/usr/bin/env python3
@@ -26,12 +26,12 @@ with open('config.json') as config_file:
 client = discord.Client()
 
 #on ready
-@client.event
+@client.event()
 async def on_ready():
     print('Bot is ready')
 
 #whenever a user sends a message
-@client.event
+@client.event()
 async def on_message(message):
     if message.content.startswith('hajime'):
 
@@ -89,5 +89,26 @@ async def on_message(message):
             except asyncio.TimeoutError:
                 await message.author.send('timed out, please try again')
 
+            # checks for command
+        elif message.content.startswith('hajime') and "to do" in message.content:
+            # connects to db
+            db = await aiosqlite.connect(...)
+            # checks to find user
+            cursor = await db.execute('SELECT trello_id FROM users where discord_id=?', (message.author,))
+            member_trello_id = await cursor.fetchone()
+            await cursor.close()
+            await db.close()
+            # uses token to get into trello
+            querystring = {"filter": "visible", "key": trello_token, "token": member_trello_id}
+            async with aiohttp.ClientSession() as session:
+                async with session.get("https://api.trello.com/1/members/" + member_trello_id + "/cards", params=querystring) as resp:
+                    # sends status and message
+                    await message.send(resp.status)
+                    await message.send(await resp.text())
+
+
+'''
+RUN
+'''
 client.run(discord_token)
 
