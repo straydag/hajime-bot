@@ -1,9 +1,9 @@
+#!/usr/bin/env python3
 '''
 NOTE: Before commit: change version number.
 Version: 0.0.1
 
 '''
-#!/usr/bin/env python3
 import json
 import asyncio
 import sqlite3
@@ -12,6 +12,7 @@ import requests
 import aiohttp
 import aiosqlite
 import os.path
+from db_access import db_access 
 from requests_oauthlib import OAuth1Session
 from discord.ext import commands
 
@@ -24,6 +25,8 @@ with open('config.json') as config_file:
 
 #creates client object
 client = discord.Client()
+#creates database access object
+db_accesser = db_access(path_to_db)
 
 #on ready
 @client.event
@@ -44,7 +47,12 @@ async def on_message(message):
             await message.channel.send('hi ' + message.author.name)
 
         #used to login to trello
-        elif "login" in message.content:  
+        elif "login" in message.content:
+
+            #makes sure user isn't already logged in
+            if(await db_accesser.is_logged_in(str(message.author.id))):
+                await message.channel.send('You are already logged in') 
+                return
 
             #send user a link to trello popup and asks the user to input authorization code
             await message.channel.send('okay, i dm-ed you the sign in info')
@@ -70,15 +78,10 @@ async def on_message(message):
                    
                     #if response valid, extracts user's name from response json data and sends welcome message with name, else sends user failure message
                     if response != 'invalid token':
-                        
-                        #adds the user's discord username to the database along with their trello id
-                        conn = await aiosqlite.connect(path_to_db)                                                     
-                        curs = await conn.cursor()
-                        await curs.execute("CREATE TABLE IF NOT EXISTS users (discord_id TEXT, trello_id TEXT, is_logged_in INTEGER)")
-                        await curs.execute("INSERT INTO users VALUES (?, ?, ?)", (message.author.id, reply.content, 1))
-                        await conn.commit() 
-                        await conn.close()
-                        
+
+                        #inserts user data into database 
+                        await db_accesser.add_user(str(message.author.id), reply.content)
+
                         #puts the json response into a response variable and send a message to the user welcoming them
                         response = json.loads(response)
                         await message.author.send('welcome ' + response.get("fullName"))  
@@ -90,4 +93,5 @@ async def on_message(message):
                 await message.author.send('timed out, please try again')
 
 client.run(discord_token)
+
 
