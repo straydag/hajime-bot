@@ -45,7 +45,7 @@ class db_access:
             get_user(discord_id <STR>)
             
             queries the database for the user matching the discord_id and returns all their data in the form of a dictionary 
-            returns: dictionary
+            returns: dictionary {"discord_id": <STR>, "trello_id": <STR>, "is_logged_in": <INT>}
         '''
 
         conn = await aiosqlite.connect(self.path_to_db)
