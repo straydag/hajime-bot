@@ -18,11 +18,13 @@ class db_access:
         conn = await aiosqlite.connect(self.path_to_db)
         curs = await conn.cursor()
 
+        await curs.execute("CREATE TABLE IF NOT EXISTS users (discord_id TEXT, trello_id TEXT, is_logged_in INTEGER)")
+        await conn.commit()
         await curs.execute("SELECT * FROM users WHERE discord_id=?", (discord_id, ))
         user_info = await curs.fetchall()
 
-        return (user_info != [] and user_info[0][2] != 0)
-        
+        return (user_info != [] and user_info[0][2] != 0)   
+
     async def add_user(self, discord_id: str, trello_id: str):
         '''
             add_user(discord_id <STR>, trello_id <STR>)
@@ -50,7 +52,7 @@ class db_access:
 
         conn = await aiosqlite.connect(self.path_to_db)
         curs = await conn.cursor()
-    
+     
         await curs.execute("SELECT * FROM users WHERE discord_id = ?", (discord_id, ))
         user_data = await curs.fetchall()
         await conn.close()  
