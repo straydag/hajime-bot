@@ -113,8 +113,7 @@ async def on_message(message):
    
             #sends each task to the users dms
             for resp in response:
-                await message.author.send(resp.get("name"))
-
+                await message.author.send(resp.get("name")) 
 
 '''
 RUN
